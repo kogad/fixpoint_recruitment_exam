@@ -98,7 +98,6 @@ end
 """
 function trainsit!(subnet_statuses, prefix_to_servers, prefix, server_statuses, address)
     subnet_statuses[prefix].is_down_prev = subnet_statuses[prefix].is_down
-    #@show did_transit_to_down(server_statuses, address)
     subnet_statuses[prefix].is_down = is_down(prefix_to_servers, server_statuses, prefix)
 end
 
@@ -182,13 +181,8 @@ function q4(filename, n, m, t)
         record_response_time!(server_records, server_log)
 
         trainsit!(server_statuses, server_records, server_log, n, m, t)
-        #@show server_statuses[server_log.address]
 
         trainsit!(subnet_statuses, prefix_to_servers, prefix, server_statuses, server_log.address)
-        # println()
-        # @show server_log
-        # @show subnet_statuses
-        # @show server_statuses
 
         if did_transit_to_down(server_statuses, server_log.address) && is_first_down_in_subnet(server_statuses, prefix_to_servers, prefix)
             subnet_down_times[prefix] = server_records[server_log.address].first_timeout
@@ -206,7 +200,6 @@ function q4(filename, n, m, t)
             println(server_records[server_log.address].first_timeout, " - ", server_log.time)
             clear_timeout_counter!(server_records, server_log.address)
 
-            #@show did_recoverd(subnet_statuses, prefix)
             if did_recoverd(subnet_statuses, prefix)
                 print("[down(subnet)] ")
                 print(prefix, " : ")
@@ -214,8 +207,6 @@ function q4(filename, n, m, t)
             end
 
         elseif did_recoverd_from_overloaded(server_statuses, server_log.address)
-            #print(is_down_from_overloaded(server_statuses, server_log.address))
-            #print(is_recoverd_from_overloaded(server_statuses, server_log.address))
             print("[overloaded]   ")
             print(server_log.address, " : ")
             println(server_records[server_log.address].first_overloaded, " - ", server_log.time)

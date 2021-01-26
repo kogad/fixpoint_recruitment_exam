@@ -153,13 +153,6 @@ function trainsit!(server_statuses, server_records, server_log, n, m, t)
     else
         # not considered 
     end
-
-    #avg_response_time= 0
-    #if length(server_records[address].response_times) >= m
-    #    @views recent_response_times = server_records[address].response_times[end-m+1:end]
-    #    avg_response_time = mean(recent_response_times)
-    #end
-    #println(server_statuses[address].is_down, " ", server_statuses[address].is_overloaded, " ", server_records[address].response_times, " ", avg_response_time)
 end
 
 
@@ -288,7 +281,6 @@ function q3(filename, n, m, t)
             server_records[server_log.address] = ServerRecord()
         end
 
-        # @show server_log
         update_timeout!(server_records, server_log)
         record_response_time!(server_records, server_log)
 
@@ -305,8 +297,6 @@ function q3(filename, n, m, t)
             clear_timeout_counter!(server_records, server_log.address)
 
         elseif did_recoverd_from_overloaded(server_statuses, server_log.address)
-            #print(is_down_from_overloaded(server_statuses, server_log.address))
-            #print(is_recoverd_from_overloaded(server_statuses, server_log.address))
             print("[overloaded] ")
             print(server_log.address, " : ")
             println(server_records[server_log.address].first_overloaded, " - ", server_log.time)
